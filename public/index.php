@@ -12,7 +12,7 @@ render_header('index', 'Home');
 ?>
 
 <div class="box">
-  <div class="box-titulo">&#9788; bem-vindo, viajante</div>
+  <div class="box-titulo">&#9788; bem-vindo, viajante [teste 123]</div>
   <div class="box-corpo">
     <p>Este é o diário público da minha peregrinação por Qud: <?= count($posts) ?> entradas até agora,
     copiadas à mão para este terminal sempre que encontro um com as teclas funcionando.
