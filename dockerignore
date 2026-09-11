@@ -1,0 +1,8 @@
+.git
+.github
+.gitignore
+README.md
+Dockerfile
+.dockerignore
+data/counter.txt
+**/.DS_Store

@@ -1,0 +1,52 @@
+name: Build e Deploy - Azure Web App for Containers
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  ACR_NAME: aulacloudopet          # <- troque pelo nome do SEU registry
+  IMAGE_NAME: sal-e-cromo
+  WEBAPP_NAME: sal-e-cromo   # <- troque pelo nome do SEU web app
+  RESOURCE_GROUP: rg-python-aula
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Login no Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Login no Azure Container Registry
+        run: az acr login --name ${{ env.ACR_NAME }}
+
+      - name: Build e push da imagem
+        run: |
+          IMAGE=${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}
+          docker build -t $IMAGE:${{ github.sha }} -t $IMAGE:latest .
+          docker push $IMAGE:${{ github.sha }}
+          docker push $IMAGE:latest
+
+      - name: Deploy no Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.WEBAPP_NAME }}
+          images: ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+      - name: Smoke test (falha o workflow se o site não responder 200)
+        run: |
+          sleep 45
+          for i in $(seq 1 10); do
+            CODE=$(curl -s -o /dev/null -w "%{http_code}" https://${{ env.WEBAPP_NAME }}.azurewebsites.net/)
+            echo "tentativa $i -> HTTP $CODE"
+            [ "$CODE" = "200" ] && exit 0
+            sleep 15
+          done
+          exit 1
