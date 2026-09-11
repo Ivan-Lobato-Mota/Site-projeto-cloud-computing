@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
 
 env:
-  ACR_NAME: aulacloudopet          # <- troque pelo nome do SEU registry
+  ACR_NAME: aulacloudopet
   IMAGE_NAME: sal-e-cromo
-  WEBAPP_NAME: sal-e-cromo   # <- troque pelo nome do SEU web app
+  WEBAPP_NAME: sal-e-cromo  
   RESOURCE_GROUP: rg-python-aula
 
 jobs:
