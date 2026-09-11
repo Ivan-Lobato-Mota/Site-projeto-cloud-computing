@@ -1,0 +1,494 @@
+/* ============================================================
+   SAL & CROMO — folha de estilo
+   Estética: wiki oficial de Caves of Qud + blog pessoal de 2004.
+   Paleta: colors.css (cores do terminal do jogo).
+   ============================================================ */
+
+@font-face {
+  font-family: 'ITC Serif Gothic Heavy';
+  src: url('itc-serif-gothic-heavy-opentype-1_ufonts.com.woff') format('woff');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'WebPlus IBM EGA';
+  src: url('WebPlus_IBM_EGA_9x14.woff') format('woff');
+  font-display: swap;
+}
+
+:root {
+  /* complementos documentados na paleta da wiki (colors.css) */
+  --brown: #98875f;
+  --yellow: #cfc041;
+  --painel: #0b2f2e;      /* fundo de caixas, um tom abaixo do --key */
+  --painel-fundo: #092423;
+  --fonte-corpo: 'WebPlus IBM EGA', 'Courier New', monospace;
+  --fonte-titulo: 'ITC Serif Gothic Heavy', Georgia, serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { background: var(--key); }
+
+body {
+  background: var(--key);
+  color: var(--grey);
+  font-family: var(--fonte-corpo);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* scanlines de monitor CRT, bem discretas */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.10) 0px,
+    rgba(0, 0, 0, 0.10) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+::selection { background: var(--gold); color: var(--key); }
+
+a         { color: var(--cyan); }
+a:visited { color: var(--magenta); }
+a:hover   { color: var(--white); background: var(--dark-cyan); text-decoration: none; }
+
+.wrap {
+  max-width: 990px;
+  margin: 0 auto;
+  padding: 10px 12px 24px;
+}
+
+/* ---------- faixa superior com marquee ---------- */
+
+.topbar {
+  border: 1px solid var(--dark-grey);
+  background: var(--painel-fundo);
+  color: var(--green);
+  margin-bottom: 10px;
+}
+.topbar marquee { padding: 3px 0; }
+.topbar b { color: var(--gold); }
+
+/* ---------- cabeçalho ---------- */
+
+.masthead {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  border: 1px solid var(--dark-grey);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.25)),
+    var(--painel);
+  padding: 18px 20px;
+}
+
+.masthead-glyph {
+  font-family: var(--fonte-corpo);
+  font-size: 56px;
+  line-height: 1;
+  color: var(--gold);
+  border: 1px solid var(--dark-grey);
+  background: var(--painel-fundo);
+  padding: 10px 16px;
+  text-shadow: 0 0 8px rgba(233, 159, 16, 0.55);
+}
+
+.site-title {
+  font-family: var(--fonte-titulo);
+  font-weight: normal;
+  font-size: 46px;
+  letter-spacing: 1px;
+  color: var(--gold);
+  text-shadow:
+    2px 2px 0 var(--crimson),
+    4px 4px 0 rgba(0, 0, 0, 0.45),
+    0 0 18px rgba(233, 159, 16, 0.35);
+}
+
+.site-tagline {
+  color: var(--dark-cyan);
+  margin-top: 4px;
+}
+
+/* ---------- navegação ---------- */
+
+.navbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 10px 0;
+}
+
+.navbar a {
+  flex: 1 1 auto;
+  text-align: center;
+  padding: 6px 12px;
+  background: var(--dark-grey);
+  color: var(--grey);
+  text-decoration: none;
+  border: 2px outset var(--dark-cyan);
+}
+.navbar a:visited { color: var(--grey); }
+.navbar a:hover {
+  background: var(--dark-cyan);
+  color: var(--white);
+}
+.navbar a.ativo {
+  background: var(--gold);
+  color: var(--key);
+  border-style: inset;
+  font-weight: bold;
+}
+.navbar a.ativo:visited { color: var(--key); }
+
+/* ---------- colunas ---------- */
+
+.cols {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.conteudo { flex: 1 1 auto; min-width: 0; }
+
+.sidebar { flex: 0 0 232px; }
+
+@media (max-width: 760px) {
+  .cols { flex-direction: column; }
+  .sidebar { flex-basis: auto; width: 100%; }
+  .site-title { font-size: 32px; }
+  .masthead-glyph { display: none; }
+}
+
+/* ---------- caixas genéricas ---------- */
+
+.box {
+  border: 1px solid var(--dark-grey);
+  background: var(--painel);
+  margin-bottom: 10px;
+}
+
+.box-titulo {
+  background: var(--dark-grey);
+  color: var(--gold);
+  padding: 3px 9px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-bottom: 1px solid var(--dark-cyan);
+}
+
+.box-corpo { padding: 10px 12px; }
+.box-corpo p + p { margin-top: 8px; }
+
+.lista-links { list-style: none; }
+.lista-links li { margin: 3px 0; }
+
+/* ---------- postagens do diário ---------- */
+
+.post {
+  border: 1px solid var(--dark-grey);
+  background: var(--painel);
+  margin-bottom: 14px;
+}
+
+.post-cabecalho {
+  background: var(--dark-grey);
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--dark-cyan);
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.post-data {
+  color: var(--green);
+  white-space: nowrap;
+}
+
+.post-titulo {
+  font-family: var(--fonte-titulo);
+  font-weight: normal;
+  font-size: 22px;
+  color: var(--gold);
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.6);
+}
+
+.post-meta {
+  padding: 5px 12px;
+  border-bottom: 1px dashed var(--dark-grey);
+  color: var(--dark-cyan);
+  font-size: 14px;
+}
+.post-meta .valor { color: var(--cyan); }
+
+.post-corpo { padding: 12px 14px; }
+.post-corpo p { margin-bottom: 10px; text-align: justify; }
+.post-corpo p:last-child { margin-bottom: 0; }
+.post-corpo p:first-child::first-letter {
+  font-family: var(--fonte-titulo);
+  font-size: 34px;
+  line-height: 1;
+  color: var(--dark-orange);
+  padding-right: 3px;
+}
+
+.divisor {
+  text-align: center;
+  color: var(--dark-grey);
+  margin: 4px 0 14px;
+  letter-spacing: 2px;
+  user-select: none;
+}
+
+/* ---------- miudezas anos 2000 ---------- */
+
+.blink { animation: piscar 1s steps(2, start) infinite; }
+@keyframes piscar { to { visibility: hidden; } }
+
+.new-badge {
+  color: var(--key);
+  background: var(--dark-orange);
+  padding: 0 6px;
+  font-weight: bold;
+}
+
+.construcao { color: var(--brown); text-decoration: line-through; cursor: help; }
+
+.centro { text-align: center; }
+.mini { font-size: 12px; color: var(--brown); }
+
+.c-ouro    { color: var(--gold); }
+.c-verde   { color: var(--green); }
+.c-ciano   { color: var(--cyan); }
+.c-azul    { color: var(--blue); }
+.c-cinza   { color: var(--grey); }
+.c-laranja { color: var(--dark-orange); }
+.c-rosa    { color: var(--magenta); }
+
+/* retrato ASCII da sidebar */
+.retrato {
+  font-family: var(--fonte-corpo);
+  text-align: center;
+  background: var(--painel-fundo);
+  border: 1px solid var(--dark-grey);
+  padding: 8px 0;
+  line-height: 1.25;
+}
+.retrato-legenda {
+  text-align: center;
+  font-size: 12px;
+  color: var(--brown);
+  margin: 6px 0 8px;
+}
+
+/* contador de visitas */
+.contador { display: inline-flex; gap: 2px; margin: 4px 0; }
+.contador span {
+  display: inline-block;
+  background: #000;
+  color: var(--green);
+  border: 1px solid var(--dark-grey);
+  padding: 1px 5px;
+  font-size: 16px;
+  text-shadow: 0 0 6px rgba(0, 196, 32, 0.8);
+}
+
+/* badges 88x31 */
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+.badge {
+  width: 88px;
+  height: 31px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.1;
+  border: 1px solid;
+  background: var(--painel-fundo);
+  user-select: none;
+}
+.b1 { color: var(--green);       border-color: var(--green); }
+.b2 { color: var(--dark-magenta); border-color: var(--dark-magenta); }
+.b3 { color: var(--gold);        border-color: var(--gold); }
+.b4 { color: var(--dark-orange); border-color: var(--dark-orange); animation: piscar 1.4s steps(2, start) infinite; }
+
+/* ---------- botões ---------- */
+
+.botao {
+  display: inline-block;
+  font-family: var(--fonte-corpo);
+  font-size: 14px;
+  background: var(--dark-grey);
+  color: var(--white) !important;
+  text-decoration: none;
+  padding: 7px 16px;
+  border: 2px outset var(--dark-cyan);
+  cursor: pointer;
+}
+.botao:hover { background: var(--dark-cyan); }
+.botao:active { border-style: inset; }
+.botao:visited { color: var(--white); }
+
+/* ---------- Salt's Wisdom: o tomo ---------- */
+
+.tomo {
+  border: 3px double var(--brown);
+  background: var(--painel-fundo);
+  padding: 22px 26px;
+  margin: 12px 0;
+}
+
+.tomo-titulo {
+  font-family: var(--fonte-titulo);
+  font-weight: normal;
+  text-align: center;
+  font-size: 26px;
+  color: var(--yellow);
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.6);
+  margin-bottom: 4px;
+}
+
+.tomo-sub {
+  text-align: center;
+  color: var(--brown);
+  font-size: 12px;
+  margin-bottom: 16px;
+}
+
+.tomo-texto p {
+  margin-bottom: 12px;
+  text-align: justify;
+}
+.tomo-texto p::first-letter {
+  color: var(--dark-orange);
+  font-size: 20px;
+}
+
+.tomo-fim {
+  text-align: center;
+  color: var(--dark-grey);
+  letter-spacing: 3px;
+  margin-top: 14px;
+}
+
+/* ---------- Carbide Chef: receita ---------- */
+
+.receita {
+  border: 1px solid var(--dark-grey);
+  background: var(--painel);
+  margin: 12px 0;
+}
+
+.receita-nome {
+  font-family: var(--fonte-titulo);
+  font-weight: normal;
+  font-size: 24px;
+  color: var(--gold);
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.6);
+  padding: 10px 14px 6px;
+}
+.receita-nome::before {
+  content: '% ';
+  color: var(--green);
+  font-family: var(--fonte-corpo);
+}
+
+.receita-secao {
+  padding: 4px 14px 10px;
+}
+.receita-secao h3 {
+  font-size: 14px;
+  font-weight: normal;
+  color: var(--dark-cyan);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 4px;
+}
+
+.receita-ingredientes { list-style: none; }
+.receita-ingredientes li { margin: 2px 0; }
+.receita-ingredientes li::before { content: '\2666  '; color: var(--gold); }
+
+.receita-efeitos {
+  border-left: 3px solid var(--dark-green);
+  background: var(--painel-fundo);
+  padding: 8px 12px;
+}
+.receita-efeitos p { color: var(--green); margin: 3px 0; }
+
+.receita-aviso {
+  margin: 0 14px 12px;
+  border: 1px solid var(--scarlet);
+  background: rgba(215, 66, 0, 0.12);
+  color: var(--dark-orange);
+  padding: 8px 12px;
+}
+
+.receita-nota {
+  padding: 0 14px 12px;
+  color: var(--brown);
+  font-style: italic;
+}
+
+/* ---------- ficha de personagem (about) ---------- */
+
+.ficha { width: 100%; border-collapse: collapse; margin: 6px 0; }
+.ficha th, .ficha td {
+  border: 1px solid var(--dark-grey);
+  padding: 4px 8px;
+  text-align: left;
+}
+.ficha th {
+  background: var(--dark-grey);
+  color: var(--gold);
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.ficha td b { color: var(--cyan); }
+
+/* ---------- rodapé ---------- */
+
+.rodape {
+  border-top: 1px solid var(--dark-grey);
+  margin-top: 8px;
+  padding-top: 12px;
+  text-align: center;
+  color: var(--brown);
+  font-size: 12px;
+}
+.rodape p { margin-bottom: 8px; }
+
+.webring {
+  display: inline-block;
+  border: 1px solid var(--dark-grey);
+  background: var(--painel);
+  padding: 8px 22px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+.webring-nome { color: var(--dark-magenta); letter-spacing: 1px; }
+
+/* barra de rolagem combinando (navegadores webkit) */
+::-webkit-scrollbar { width: 14px; background: var(--painel-fundo); }
+::-webkit-scrollbar-thumb {
+  background: var(--dark-grey);
+  border: 2px solid var(--painel-fundo);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--dark-cyan); }
