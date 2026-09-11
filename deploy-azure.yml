@@ -8,7 +8,7 @@ on:
 env:
   ACR_NAME: aulacloudopet
   IMAGE_NAME: sal-e-cromo
-  WEBAPP_NAME: sal-e-cromo  
+  WEBAPP_NAME: sal-e-cromo
   RESOURCE_GROUP: rg-python-aula
 
 jobs:
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout do código
+      - name: Checkout do codigo
         uses: actions/checkout@v4
 
       - name: Login no Azure
@@ -40,13 +40,27 @@ jobs:
           app-name: ${{ env.WEBAPP_NAME }}
           images: ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
-      - name: Smoke test (falha o workflow se o site não responder 200)
+      # O hostname do Azure agora tem sufixo aleatorio e regiao embutidos,
+      # entao ele e consultado em vez de montado a partir do nome do app.
+      - name: Smoke test
         run: |
+          HOST=$(az webapp show -g ${{ env.RESOURCE_GROUP }} -n ${{ env.WEBAPP_NAME }} \
+                   --query defaultHostName -o tsv)
+          echo "Testando https://$HOST"
           sleep 45
-          for i in $(seq 1 10); do
-            CODE=$(curl -s -o /dev/null -w "%{http_code}" https://${{ env.WEBAPP_NAME }}.azurewebsites.net/)
+          for i in $(seq 1 12); do
+            CODE=$(curl -s -o /dev/null -w "%{http_code}" "https://$HOST/")
             echo "tentativa $i -> HTTP $CODE"
-            [ "$CODE" = "200" ] && exit 0
+            if [ "$CODE" = "200" ]; then
+              echo "Verificando as demais paginas..."
+              for p in "/about.php" "/wisdom.php?fragmento=42" "/chef.php?receita=7"; do
+                PCODE=$(curl -s -o /dev/null -w "%{http_code}" "https://$HOST$p")
+                echo "  $p -> HTTP $PCODE"
+                [ "$PCODE" = "200" ] || exit 1
+              done
+              exit 0
+            fi
             sleep 15
           done
+          echo "O app nao respondeu 200. Veja: az webapp log tail -g ${{ env.RESOURCE_GROUP }} -n ${{ env.WEBAPP_NAME }}"
           exit 1
